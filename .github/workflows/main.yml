@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build_and_test:
+    name: Test and Build - ${{ matrix.version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - 1.70.0
+          - stable
+          - nightly
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ${{ matrix.version }}
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: ${{ matrix.version }}
+          target: x86_64-unknown-linux-gnu
+      - run: cargo test --no-fail-fast -- --nocapture
+        env:
+          RUST_BACKTRACE: "1"
+          RUST_LOG: "debug"
+      - run: cargo build --workspace --verbose
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain and components
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          components: rustfmt, clippy
+      - run: cargo fmt -- --color=always --check
+      - run: cargo check --tests --workspace --verbose
+      - run: cargo clippy --workspace --verbose
