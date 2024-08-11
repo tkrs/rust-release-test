@@ -2,5 +2,7 @@
 name = "rust-release-test"
 version = "0.1.0"
 edition = "2021"
+description = "release test"
+license-file = "./LICENSE"
 
 [dependencies]
