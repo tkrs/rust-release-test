@@ -6,6 +6,10 @@ pub fn minus(left: i64, right: i64) -> i64 {
     left - right
 }
 
+pub fn mul(left: i64, right: i64) -> i64 {
+    left * right
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -20,5 +24,11 @@ mod tests {
     fn minus_works() {
         let result = minus(2, 3);
         assert_eq!(result, -1);
+    }
+
+    #[test]
+    fn mul_works() {
+        let result = mul(2, 3);
+        assert_eq!(result, 6);
     }
 }
